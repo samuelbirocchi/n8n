@@ -56,7 +56,7 @@ import {
 import type { UpdateExecutionPayload } from '@/interfaces';
 import { NodeTypes } from '@/node-types';
 import { Push } from '@/push';
-import { SsrfProtectionService } from '@/services/ssrf/ssrf-protection.service';
+import { SsrfProtectionService } from 'n8n-core';
 import { UrlService } from '@/services/url.service';
 import { TaskRequester } from '@/task-runners/task-managers/task-requester';
 import { findSubworkflowStart } from '@/utils';

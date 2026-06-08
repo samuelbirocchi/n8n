@@ -34,6 +34,7 @@ const mockNormalizeHost = normalizeHost as MockedFunction<typeof normalizeHost>;
 /** Build a mock SSRF guard whose IP checks pass by default; override per test. */
 function makeSsrfGuard(overrides: Partial<SsrfGuard> = {}): SsrfGuard {
 	return {
+		validateIp: vi.fn(() => createResultOk(undefined)),
 		validateUrl: vi.fn(async () => createResultOk(undefined)),
 		validateRedirectSync: vi.fn(),
 		createSecureLookup: vi.fn(() => (() => {}) as never),

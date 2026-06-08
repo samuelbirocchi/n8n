@@ -3,7 +3,7 @@ import {
 	type BuiltTool,
 	type McpServerConfig as NativeMcpServerConfig,
 } from '@n8n/agents';
-import type { Result } from 'n8n-workflow';
+import type { SsrfBridge } from 'n8n-core';
 import { UserError } from 'n8n-workflow';
 
 import {
@@ -19,15 +19,6 @@ import { createToolRegistry, createToolRegistryFromTools } from '../tool-registr
 import type { InstanceAiToolRegistry, McpServerConfig } from '../types';
 
 type McpToolRegistry = InstanceAiToolRegistry;
-
-/**
- * SSRF policy gate for outbound MCP URLs. The cli's `SsrfProtectionService`
- * satisfies this structurally; we keep the local shape narrow to avoid pulling
- * `n8n-core` into this package just for one type.
- */
-export interface SsrfUrlValidator {
-	validateUrl(url: string | URL): Promise<Result<void, Error>>;
-}
 
 function buildNativeMcpConfigs(configs: McpServerConfig[]): NativeMcpServerConfig[] {
 	const servers: NativeMcpServerConfig[] = [];
@@ -110,7 +101,7 @@ export class McpClientManager {
 
 	private clientsByKey = new Map<string, McpClient>();
 
-	constructor(private readonly ssrfValidator?: SsrfUrlValidator) {}
+	constructor(private readonly ssrfValidator?: SsrfBridge) {}
 
 	async getRegularTools(configs: McpServerConfig[], logger?: Logger): Promise<McpToolRegistry> {
 		const safeConfigs = getSafeMcpServers(configs, logger, 'external MCP');

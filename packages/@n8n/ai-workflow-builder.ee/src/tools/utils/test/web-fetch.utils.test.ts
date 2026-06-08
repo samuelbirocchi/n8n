@@ -21,6 +21,7 @@ const mockGet = axios.get as Mock;
 /** Build a guard whose IP checks pass by default; override per test. */
 function makeGuard(overrides: Partial<SsrfGuard> = {}): SsrfGuard {
 	return {
+		validateIp: vi.fn(() => createResultOk(undefined)),
 		validateUrl: vi.fn(async () => createResultOk(undefined)),
 		validateRedirectSync: vi.fn(),
 		createSecureLookup: vi.fn((): LookupFunction => (() => {}) as unknown as LookupFunction),

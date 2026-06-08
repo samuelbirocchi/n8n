@@ -1,13 +1,13 @@
 import { Logger } from '@n8n/backend-common';
 import { SsrfProtectionConfig } from '@n8n/config';
 import { Service } from '@n8n/di';
-import { SsrfBridge, SsrfCheckResult } from 'n8n-core';
 import { createResultError, ensureError, Result, createResultOk } from 'n8n-workflow';
 import assert from 'node:assert';
 import type { LookupAddress, LookupOptions } from 'node:dns';
 import { isIP } from 'node:net';
 import type { BlockList, LookupFunction } from 'node:net';
 
+import type { SsrfBridge, SsrfCheckResult } from '../index';
 import { DnsResolver } from './dns-resolver';
 import { HostnameMatcher } from './hostname-matcher';
 import { buildIpRangeList } from './ip-range-builder';
@@ -68,7 +68,7 @@ export class SsrfProtectionService implements SsrfBridge {
 	async validateUrl(url: string | URL): Promise<SsrfCheckResult> {
 		const parsed = this.tryParseUrl(url);
 		if (!parsed) {
-			return createResultError(new Error(`Invalid URL: ${url}`));
+			return createResultError(new Error(`Invalid URL: ${String(url)}`));
 		}
 
 		const { hostname } = parsed;

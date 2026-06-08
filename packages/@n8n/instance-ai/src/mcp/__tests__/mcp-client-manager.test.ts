@@ -17,8 +17,9 @@ vi.mock('../../agent/sanitize-mcp-schemas', () => ({
 import { McpClient } from '@n8n/agents';
 import { createResultError, createResultOk, UserError } from 'n8n-workflow';
 
+import type { SsrfBridge } from 'n8n-core';
+
 import { sanitizeMcpToolSchemas } from '../../agent/sanitize-mcp-schemas';
-import type { SsrfUrlValidator } from '../mcp-client-manager';
 import { McpClientManager } from '../mcp-client-manager';
 
 const mockedMcpClient = McpClient as unknown as Mock;
@@ -42,10 +43,13 @@ interface SanitizeOptions {
 	}) => void;
 }
 
-function createValidatorMock(): Mocked<SsrfUrlValidator> {
+function createValidatorMock(): Mocked<SsrfBridge> {
 	return {
 		validateUrl: vi.fn().mockResolvedValue(createResultOk(undefined)),
-	} as Mocked<SsrfUrlValidator>;
+		validateIp: vi.fn().mockReturnValue(createResultOk(undefined)),
+		validateRedirectSync: vi.fn(),
+		createSecureLookup: vi.fn(),
+	} as unknown as Mocked<SsrfBridge>;
 }
 
 describe('McpClientManager', () => {

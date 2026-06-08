@@ -17,7 +17,7 @@ import { GlobalConfig, SsrfProtectionConfig, type InstanceAiConfig } from '@n8n/
 import { OnLeaderStepdown, OnLeaderTakeover } from '@n8n/decorators';
 import { ErrorReporter, InstanceSettings } from 'n8n-core';
 
-import { SsrfProtectionService } from '@/services/ssrf/ssrf-protection.service';
+import { SsrfProtectionService } from 'n8n-core';
 import { AiBuilderTemporaryWorkflowRepository, UserRepository, type User } from '@n8n/db';
 import { Service } from '@n8n/di';
 import { UrlService } from '@/services/url.service';

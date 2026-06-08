@@ -14,6 +14,8 @@ import { mock } from 'vitest-mock-extended';
 
 import type { SsrfBridge } from '@/execution-engine';
 import type { ExecutionLifecycleHooks } from '@/execution-engine/execution-lifecycle-hooks';
+import type { DnsResolver } from '@/execution-engine/ssrf';
+import { SsrfProtectionService } from '@/execution-engine/ssrf';
 
 import { getRequestHelperFunctions } from '../request-helper-functions';
 import { httpRequest } from '../request-helpers/http-request';
@@ -21,16 +23,6 @@ import { httpRequest } from '../request-helpers/http-request';
 type DnsResolverLike = {
 	lookup(hostname: string, options?: LookupOptions): Promise<LookupAddress[]>;
 };
-
-type SsrfProtectionServiceCtor = new (
-	config: SsrfProtectionConfig,
-	dnsResolver: DnsResolverLike,
-	logger: Logger,
-) => SsrfBridge;
-
-// Lazy import via `await` inside `beforeAll` since require() can't resolve cross-package TS.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let SsrfProtectionService: SsrfProtectionServiceCtor = null as any;
 
 function createConfig(overrides: Partial<SsrfProtectionConfig> = {}): SsrfProtectionConfig {
 	const config = new SsrfProtectionConfig();
@@ -54,7 +46,11 @@ function createSsrfBridge(
 	const logger = mock<Logger>({ scoped: vi.fn().mockReturnValue(scopedLogger) });
 	const config = createConfig(configOverrides);
 
-	const ssrfBridge = new SsrfProtectionService(config, dnsResolver, logger);
+	const ssrfBridge = new SsrfProtectionService(
+		config,
+		dnsResolver as unknown as DnsResolver,
+		logger,
+	);
 
 	return { ssrfBridge, dnsResolver };
 }
@@ -72,13 +68,6 @@ function createRequestHelpers(ssrfBridge?: SsrfBridge) {
 }
 
 describe('SSRF end-to-end integration', () => {
-	beforeAll(async () => {
-		const mod = (await import(
-			'../../../../../../cli/src/services/ssrf/ssrf-protection.service'
-		)) as unknown as { SsrfProtectionService: SsrfProtectionServiceCtor };
-		SsrfProtectionService = mod.SsrfProtectionService;
-	});
-
 	afterEach(() => {
 		nock.cleanAll();
 		vi.clearAllMocks();

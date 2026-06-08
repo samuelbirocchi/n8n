@@ -970,6 +970,9 @@ importers:
       lodash:
         specifier: 4.18.1
         version: 4.18.1
+      n8n-core:
+        specifier: workspace:*
+        version: link:../../core
       n8n-workflow:
         specifier: workspace:*
         version: link:../../workflow
@@ -1988,6 +1991,9 @@ importers:
       mammoth:
         specifier: 1.12.0
         version: 1.12.0
+      n8n-core:
+        specifier: workspace:*
+        version: link:../../core
       n8n-workflow:
         specifier: workspace:*
         version: link:../../workflow
@@ -3532,6 +3538,9 @@ importers:
       axios:
         specifier: 1.16.1
         version: 1.16.1(debug@4.4.3)
+      cache-manager:
+        specifier: 5.2.3
+        version: 5.2.3
       callsites:
         specifier: 'catalog:'
         version: 3.1.0

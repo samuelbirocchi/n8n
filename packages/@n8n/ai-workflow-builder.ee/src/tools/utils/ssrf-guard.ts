@@ -1,23 +1,8 @@
-/**
- * SSRF guard abstraction for the web_fetch tool.
- *
- * The builder package cannot import the cli `SsrfProtectionService` (cli depends on
- * this package) nor n8n-core's `SsrfBridge` type (not a dependency), so we declare a
- * minimal local contract here. `SsrfProtectionService` is structurally assignable to
- * `SsrfGuard`, so the cli composition root can pass it directly.
- */
 import { type Result, createResultOk, ensureError } from 'n8n-workflow';
 import dns from 'node:dns';
 import type { LookupFunction } from 'node:net';
 
-export interface SsrfGuard {
-	/** Resolve and validate a URL's host(s) against the blocklist/allowlist. */
-	validateUrl(url: string | URL): Promise<Result<void, Error>>;
-	/** Synchronously validate a redirect target (catches direct-IP targets). */
-	validateRedirectSync(url: string): void;
-	/** Drop-in `dns.lookup` replacement that validates the resolved IP at connect time. */
-	createSecureLookup(): LookupFunction;
-}
+export type { SsrfBridge as SsrfGuard } from 'n8n-core';
 
 /**
  * Thrown inside `beforeRedirect` to halt axios auto-follow when a redirect crosses to a
@@ -34,8 +19,9 @@ export class CrossHostRedirectError extends Error {
  * No-op guard used when SSRF protection is disabled (and in the eval harness / tests).
  * IP-level checks become no-ops; the tool's domain-approval layer still applies.
  */
-export function createPassthroughSsrfGuard(): SsrfGuard {
+export function createPassthroughSsrfGuard(): import('n8n-core').SsrfBridge {
 	return {
+		validateIp: () => createResultOk(undefined) as Result<void, Error>,
 		validateUrl: async () => createResultOk(undefined),
 		validateRedirectSync: () => {},
 		// `dns.lookup` is a valid LookupFunction; axios callbackifies it.
