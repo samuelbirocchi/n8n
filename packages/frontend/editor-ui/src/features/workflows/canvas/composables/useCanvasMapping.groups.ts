@@ -314,11 +314,37 @@ export function buildCollapsedGroupByNodeId(
  * Re-anchor connections crossing a collapsed group's boundary onto the
  * group's title bar (left / right handles). Edges fully inside a collapsed
  * group are dropped. Edges that converge on the same external endpoint
- * (same node + same handle) collapse into a single rendered line and are
- * marked `merged` so the renderer drops their label.
+ * (same node + same handle) collapse into a single rendered line; status
+ * is promoted on merge (running > error > pinned > success > undefined) so
+ * a merged line never looks idle when something behind it isn't.
  */
+const STATUS_PRIORITY: Record<NonNullable<CanvasConnectionData['status']>, number> = {
+	running: 4,
+	error: 3,
+	pinned: 2,
+	success: 1,
+};
+
+function priorityOf(status: CanvasConnectionData['status']): number {
+	return status === undefined ? 0 : STATUS_PRIORITY[status];
+}
+
+function pickHigherPriorityStatus(
+	a: CanvasConnectionData['status'],
+	b: CanvasConnectionData['status'],
+): CanvasConnectionData['status'] {
+	return priorityOf(a) >= priorityOf(b) ? a : b;
+}
+
 export interface CanvasConnectionWithMergeFlag extends CanvasConnection {
-	data?: CanvasConnectionData & { merged?: boolean };
+	data?: CanvasConnectionData & {
+		merged?: boolean;
+		// Real underlying node IDs preserved through re-anchor so
+		// downstream code can still look up execution state when the
+		// VueFlow source/target has been rewritten to a `group:*` id.
+		sourceNodeId?: string;
+		targetNodeId?: string;
+	};
 }
 
 export function reanchorCollapsedConnections(
@@ -354,9 +380,10 @@ export function reanchorCollapsedConnections(
 		const existing = byKey.get(dedupeKey);
 
 		if (existing) {
-			// Mark the first-seen edge as merged so the renderer drops its label.
+			// Promote status, mark merged so the label drops out.
 			existing.data = {
 				...(existing.data as CanvasConnectionData),
+				status: pickHigherPriorityStatus(existing.data?.status, conn.data?.status),
 				merged: true,
 			};
 			continue;
@@ -374,6 +401,11 @@ export function reanchorCollapsedConnections(
 			target: targetId,
 			sourceHandle,
 			targetHandle,
+			data: {
+				...(conn.data as CanvasConnectionData),
+				...(sourceGroup ? { sourceNodeId: conn.source } : {}),
+				...(targetGroup ? { targetNodeId: conn.target } : {}),
+			},
 		};
 
 		byKey.set(dedupeKey, rewritten);

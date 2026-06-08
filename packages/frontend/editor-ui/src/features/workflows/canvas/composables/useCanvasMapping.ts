@@ -690,7 +690,14 @@ export function useCanvasMapping({
 			// item count would be ambiguous — drop the label.
 			const merged = (connection.data as { merged?: boolean } | undefined)?.merged === true;
 			const label = merged ? '' : getConnectionLabel(connection);
-			const data = getConnectionData(connection);
+			// Honour a status promoted by re-anchor dedupe; otherwise
+			// recompute from the underlying source node's runtime state.
+			const promotedStatus = (connection.data as CanvasConnectionData | undefined)?.status;
+			const baseData = getConnectionData(connection);
+			const data: CanvasConnectionData = {
+				...baseData,
+				status: promotedStatus ?? baseData.status,
+			};
 
 			return {
 				...connection,
@@ -703,39 +710,55 @@ export function useCanvasMapping({
 	});
 
 	function getConnectionData(connection: CanvasConnection): CanvasConnectionData {
-		const { type, index } = parseCanvasConnectionHandleString(connection.sourceHandle);
-		const runData = nodeExecutionRunDataOutputMapById.value[connection.source]?.[type]?.[index];
+		// Re-anchored edges have `group:*` IDs on `connection.source` / `.target`.
+		// `reanchorCollapsedConnections` stashes the real underlying node IDs on
+		// `data.sourceNodeId` / `.targetNodeId` so the lookups below can still
+		// reach execution state for an edge leaving / entering a collapsed group.
+		const dataWithIds = connection.data as
+			| (CanvasConnectionData & { sourceNodeId?: string; targetNodeId?: string })
+			| undefined;
+		const sourceNodeId = dataWithIds?.sourceNodeId ?? connection.source;
+		const targetNodeId = dataWithIds?.targetNodeId ?? connection.target;
+
+		// The handle string is "right" / "left" on re-anchored edges; fall back
+		// to the original port info preserved on `data.source` for type + index.
+		const dataSource = dataWithIds?.source;
+		const parsedHandle = parseCanvasConnectionHandleString(connection.sourceHandle);
+		const type = dataSource?.type ?? parsedHandle.type;
+		const index = dataSource?.index ?? parsedHandle.index;
+
+		const runData = nodeExecutionRunDataOutputMapById.value[sourceNodeId]?.[type]?.[index];
 		const runDataTotal = runData?.total ?? 0;
 
-		const sourceTasks = nodeExecutionRunDataById.value[connection.source] ?? [];
+		const sourceTasks = nodeExecutionRunDataById.value[sourceNodeId] ?? [];
 		let lastSourceTask: ITaskData | undefined = sourceTasks[sourceTasks.length - 1];
 		if (lastSourceTask?.executionStatus === 'canceled' && sourceTasks.length > 1) {
 			lastSourceTask = sourceTasks[sourceTasks.length - 2];
 		}
 
 		let status: CanvasConnectionData['status'];
-		if (nodeExecutionRunningById.value[connection.source] && runDataTotal === 0) {
+		if (nodeExecutionRunningById.value[sourceNodeId] && runDataTotal === 0) {
 			status = 'running';
 		} else if (
-			nodePinnedDataById.value[connection.source] &&
-			nodeExecutionRunDataById.value[connection.source]
+			nodePinnedDataById.value[sourceNodeId] &&
+			nodeExecutionRunDataById.value[sourceNodeId]
 		) {
 			status = 'pinned';
-		} else if (nodeHasIssuesById.value[connection.source]) {
+		} else if (nodeHasIssuesById.value[sourceNodeId]) {
 			status = 'error';
 		} else if (runDataTotal > 0 && lastSourceTask?.executionStatus !== 'canceled') {
 			// For non-main connections (model, memory, tool, etc.), only mark as executed
 			// if the target node also executed, since these are passive connections
 			const isMainConnection = type === NodeConnectionTypes.Main;
-			const targetNodeHasAnyExecution = nodeExecutionRunDataById.value[connection.target];
+			const targetNodeHasAnyExecution = nodeExecutionRunDataById.value[targetNodeId];
 
 			if (isMainConnection || targetNodeHasAnyExecution) {
 				status = 'success';
 			}
 		}
 
-		const sourceInputs = renderData.value.nodeInputsByNodeId.get(connection.source)?.value ?? [];
-		const targetInputs = renderData.value.nodeInputsByNodeId.get(connection.target)?.value ?? [];
+		const sourceInputs = renderData.value.nodeInputsByNodeId.get(sourceNodeId)?.value ?? [];
+		const targetInputs = renderData.value.nodeInputsByNodeId.get(targetNodeId)?.value ?? [];
 		const maxConnections = [...sourceInputs, ...targetInputs]
 			.filter((port) => port.type === type)
 			.reduce<number | undefined>((acc, port) => {
