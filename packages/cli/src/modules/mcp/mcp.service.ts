@@ -88,6 +88,12 @@ export type McpAppsResolution = {
 	variant: McpAppsTelemetryVariant;
 };
 
+// The MCP SDK ships separate ESM/CJS builds. In this CommonJS package a static
+// type import resolves to the CJS copy, while the runtime `await import()` in
+// `getServer` yields the ESM copy. They're the same class, so we bridge the two
+// identities at the single call site below.
+type McpServerInstance = InstanceType<typeof McpServer>;
+
 @Service()
 export class McpService {
 	/**
@@ -338,14 +344,19 @@ export class McpService {
 
 		// Workflow builder tools (enabled via N8N_MCP_BUILDER_ENABLED)
 		if (builderEnabled) {
-			await this.registerBuilderTools(server, user, dataTableOps, mcpAppsEnabled);
+			await this.registerBuilderTools(
+				server as unknown as McpServerInstance,
+				user,
+				dataTableOps,
+				mcpAppsEnabled,
+			);
 		}
 
 		return server;
 	}
 
 	private async registerBuilderTools(
-		server: InstanceType<typeof McpServer>,
+		server: McpServerInstance,
 		user: User,
 		dataTableOps: ReturnType<DataTableProxyService['makeDataTableOperationsForUser']>,
 		mcpAppsEnabled: boolean,

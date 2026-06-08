@@ -94,7 +94,12 @@ export class InfisicalProvider extends SecretsProvider {
 	}
 
 	protected async doConnect(): Promise<void> {
-		const { default: InfisicalClientClass } = await import('infisical-node');
+		// `infisical-node` is a CommonJS package with ESM-style declarations, so
+		// NodeNext types the dynamic-import default as a nested namespace. The
+		// runtime value is the class constructor, so narrow it back.
+		const { default: InfisicalClientClass } = (await import('infisical-node')) as unknown as {
+			default: new (settings: InfisicalSettings) => InfisicalClient;
+		};
 		this.client = new InfisicalClientClass(this.settings);
 
 		const [testSuccess] = await this.test();
@@ -106,7 +111,9 @@ export class InfisicalProvider extends SecretsProvider {
 	}
 
 	async getEnvironment(): Promise<string> {
-		const { getServiceTokenData } = await import('infisical-node/lib/api/serviceTokenData');
+		const { getServiceTokenData } = await import(
+			'infisical-node/lib/api/serviceTokenData/index.js'
+		);
 		const serviceTokenData = (await getServiceTokenData(
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			this.client.clientConfig,
@@ -126,7 +133,7 @@ export class InfisicalProvider extends SecretsProvider {
 		}
 		try {
 			const { populateClientWorkspaceConfigsHelper } = await import(
-				'infisical-node/lib/helpers/key'
+				'infisical-node/lib/helpers/key.js'
 			);
 			await populateClientWorkspaceConfigsHelper(this.client.clientConfig);
 			return [true];
