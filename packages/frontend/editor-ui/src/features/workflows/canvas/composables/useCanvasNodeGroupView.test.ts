@@ -15,7 +15,7 @@ function setup(initialGroups: Array<{ id: string; name: string; nodeIds: string[
 }
 
 describe('useCanvasNodeGroupView', () => {
-	describe('AC #0 — default state on workflow load', () => {
+	describe('default state on workflow load', () => {
 		it('marks every group from setNodeGroups as collapsed', () => {
 			const { nodeGroups, view } = setup();
 
@@ -68,7 +68,7 @@ describe('useCanvasNodeGroupView', () => {
 		});
 	});
 
-	describe('AC #0 — new groups start expanded', () => {
+	describe('new groups start expanded', () => {
 		it('does not collapse a newly created group', () => {
 			const { nodeGroups, view } = setup();
 
@@ -97,7 +97,7 @@ describe('useCanvasNodeGroupView', () => {
 		});
 	});
 
-	describe('updateName / addNodesToGroup — collapse state unchanged (AC #0 omission)', () => {
+	describe('updateName / addNodesToGroup — collapse state unchanged', () => {
 		it('does not flip collapsed state when renaming a collapsed group', () => {
 			const { nodeGroups, view } = setup([{ id: 'g1', name: 'A', nodeIds: ['a'] }]);
 
@@ -176,7 +176,7 @@ describe('useCanvasNodeGroupView', () => {
 		});
 	});
 
-	describe('AC #9 — toggle is view state, never marks dirty', () => {
+	describe('toggle is view state, never marks dirty', () => {
 		it('toggleCollapsed does not trigger onStateDirty on the document store', () => {
 			const { nodeGroups, view } = setup([{ id: 'g1', name: 'A', nodeIds: ['a'] }]);
 			const dirtySpy = vi.fn();
