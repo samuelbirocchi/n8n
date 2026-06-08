@@ -3,8 +3,8 @@ import { CredentialsRepository, ExecutionDataRepository } from '@n8n/db';
 import { Service } from '@n8n/di';
 import type { IWorkflowBase } from 'n8n-workflow';
 
-import { CREDENTIALS_REPORT } from '@/security-audit/constants';
-import type { RiskReporter, Risk } from '@/security-audit/types';
+import { CREDENTIALS_REPORT } from '@/security-audit/constants.js';
+import type { RiskReporter, Risk } from '@/security-audit/types.js';
 
 @Service()
 export class CredentialsRiskReporter implements RiskReporter {

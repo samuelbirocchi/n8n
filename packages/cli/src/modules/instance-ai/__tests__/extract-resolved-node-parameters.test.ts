@@ -9,9 +9,9 @@ import type {
 	ITaskData,
 } from 'n8n-workflow';
 
-import type { NodeTypes } from '@/node-types';
+import type { NodeTypes } from '@/node-types.js';
 
-import { extractResolvedNodeParameters } from '../extract-resolved-node-parameters';
+import { extractResolvedNodeParameters } from '../extract-resolved-node-parameters.js';
 
 // ---------------------------------------------------------------------------
 // Helpers

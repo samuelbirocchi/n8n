@@ -7,7 +7,7 @@ import type {
 	Themed,
 } from 'n8n-workflow';
 
-import type { McpRegistryIcon, McpRegistryServer } from './registry/mcp-registry.types';
+import type { McpRegistryIcon, McpRegistryServer } from './registry/mcp-registry.types.js';
 
 export const MCP_REGISTRY_PACKAGE_NAME = '@n8n/mcp-registry';
 export const LANGCHAIN_PACKAGE_NAME = '@n8n/n8n-nodes-langchain';

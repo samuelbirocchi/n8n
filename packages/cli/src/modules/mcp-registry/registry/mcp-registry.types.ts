@@ -1,4 +1,4 @@
-import type { McpRegistryServerEntity } from './mcp-registry-server.entity';
+import type { McpRegistryServerEntity } from './mcp-registry-server.entity.js';
 
 type McpRegistryServerUpsertRow = Pick<
 	McpRegistryServerEntity,

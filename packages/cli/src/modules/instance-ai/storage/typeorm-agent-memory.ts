@@ -23,15 +23,15 @@ import type {
 } from '@n8n/instance-ai';
 import { In, LessThan, Like } from '@n8n/typeorm';
 
-import { TypeORMObservationLogStore } from './typeorm-observation-log-store';
-import type { InstanceAiMessage } from '../entities/instance-ai-message.entity';
-import type { InstanceAiThread } from '../entities/instance-ai-thread.entity';
-import { InstanceAiMessageRepository } from '../repositories/instance-ai-message.repository';
-import { InstanceAiObservationCursorRepository } from '../repositories/instance-ai-observation-cursor.repository';
-import { InstanceAiObservationLockRepository } from '../repositories/instance-ai-observation-lock.repository';
-import { InstanceAiObservationRepository } from '../repositories/instance-ai-observation.repository';
-import { InstanceAiResourceRepository } from '../repositories/instance-ai-resource.repository';
-import { InstanceAiThreadRepository } from '../repositories/instance-ai-thread.repository';
+import { TypeORMObservationLogStore } from './typeorm-observation-log-store.js';
+import type { InstanceAiMessage } from '../entities/instance-ai-message.entity.js';
+import type { InstanceAiThread } from '../entities/instance-ai-thread.entity.js';
+import { InstanceAiMessageRepository } from '../repositories/instance-ai-message.repository.js';
+import { InstanceAiObservationCursorRepository } from '../repositories/instance-ai-observation-cursor.repository.js';
+import { InstanceAiObservationLockRepository } from '../repositories/instance-ai-observation-lock.repository.js';
+import { InstanceAiObservationRepository } from '../repositories/instance-ai-observation.repository.js';
+import { InstanceAiResourceRepository } from '../repositories/instance-ai-resource.repository.js';
+import { InstanceAiThreadRepository } from '../repositories/instance-ai-thread.repository.js';
 
 function parseJsonSafe(text: string): unknown {
 	try {

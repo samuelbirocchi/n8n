@@ -5,14 +5,14 @@ import { Service } from '@n8n/di';
 import { InstanceSettings } from 'n8n-core';
 import { UnexpectedError, type IWorkflowExecutionDataProcess } from 'n8n-workflow';
 
-import { ActiveExecutions } from '@/active-executions';
-import { ExecutionAlreadyResumingError } from '@/errors/execution-already-resuming.error';
-import { OwnershipService } from '@/services/ownership.service';
-import { WorkflowRunner } from '@/workflow-runner';
+import { ActiveExecutions } from '@/active-executions.js';
+import { ExecutionAlreadyResumingError } from '@/errors/execution-already-resuming.error.js';
+import { OwnershipService } from '@/services/ownership.service.js';
+import { WorkflowRunner } from '@/workflow-runner.js';
 import {
 	shouldRestartParentExecution,
 	updateParentExecutionWithChildResults,
-} from './workflow-helpers';
+} from './workflow-helpers.js';
 
 @Service()
 export class WaitTracker {

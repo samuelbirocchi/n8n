@@ -3,11 +3,11 @@ import { In } from '@n8n/db';
 // eslint-disable-next-line n8n-local-rules/misplaced-n8n-typeorm-import
 import type { EntityManager } from '@n8n/typeorm';
 
-import type { ICredentialConnectionStatusProvider } from '@/credentials/credential-connection-status-provider.interface';
+import type { ICredentialConnectionStatusProvider } from '@/credentials/credential-connection-status-provider.interface.js';
 
-import { SYSTEM_RESOLVER_ID } from '../constants';
-import { DynamicCredentialUserEntry } from '../database/entities/dynamic-credential-user-entry';
-import { DynamicCredentialUserEntryRepository } from '../database/repositories/dynamic-credential-user-entry.repository';
+import { SYSTEM_RESOLVER_ID } from '../constants.js';
+import { DynamicCredentialUserEntry } from '../database/entities/dynamic-credential-user-entry.js';
+import { DynamicCredentialUserEntryRepository } from '../database/repositories/dynamic-credential-user-entry.repository.js';
 
 /**
  * Returns the set of credential ids for which a given user has a per-user

@@ -2,7 +2,7 @@ import { Tool, type InterruptibleToolContext, type ToolContext } from '@n8n/agen
 import { z } from 'zod';
 
 import type { AgentIntegrationConfig } from '@n8n/api-types';
-import { INTEGRATION_ERROR_CODES, type IntegrationErrorCode } from './integration-error-codes';
+import { INTEGRATION_ERROR_CODES, type IntegrationErrorCode } from './integration-error-codes.js';
 
 export type IntegrationMessageTarget =
 	| {

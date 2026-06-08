@@ -15,11 +15,11 @@ import type { BinaryDataService, ErrorReporter, StorageConfig } from 'n8n-core';
 import type { IWorkflowBase } from 'n8n-workflow';
 import { createEmptyRunExecutionData, UnexpectedError } from 'n8n-workflow';
 
-import { DuplicateExecutionError } from '@/errors/duplicate-execution.error';
-import type { DbStore } from '@/executions/execution-data/db-store';
-import type { FsStore } from '@/executions/execution-data/fs-store';
-import { MissingExecutionDataError } from '@/executions/execution-data/missing-execution-data.error';
-import { ExecutionPersistence } from '@/executions/execution-persistence';
+import { DuplicateExecutionError } from '@/errors/duplicate-execution.error.js';
+import type { DbStore } from '@/executions/execution-data/db-store.js';
+import type { FsStore } from '@/executions/execution-data/fs-store.js';
+import { MissingExecutionDataError } from '@/executions/execution-data/missing-execution-data.error.js';
+import { ExecutionPersistence } from '@/executions/execution-persistence.js';
 
 describe('ExecutionPersistence', () => {
 	const executionRepository = mock<ExecutionRepository>();

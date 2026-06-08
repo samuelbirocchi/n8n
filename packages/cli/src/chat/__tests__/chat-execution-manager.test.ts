@@ -2,8 +2,8 @@ import { ExecutionRepository } from '@n8n/db';
 import type { IExecutionResponse } from '@n8n/db';
 import { TOOL_EXECUTOR_NODE_NAME } from '@n8n/constants';
 
-import * as WorkflowExecuteAdditionalData from '@/workflow-execute-additional-data';
-import { WorkflowRunner } from '@/workflow-runner';
+import * as WorkflowExecuteAdditionalData from '@/workflow-execute-additional-data.js';
+import { WorkflowRunner } from '@/workflow-runner.js';
 import { mockInstance } from '@n8n/backend-test-utils';
 import {
 	CHAT_NODE_TYPE,
@@ -12,10 +12,10 @@ import {
 	RESPOND_TO_WEBHOOK_NODE_TYPE,
 } from 'n8n-workflow';
 
-import { NodeTypes } from '../../node-types';
-import { OwnershipService } from '../../services/ownership.service';
-import { ChatExecutionManager } from '../chat-execution-manager';
-import type { ChatMessage } from '../chat-service.types';
+import { NodeTypes } from '../../node-types.js';
+import { OwnershipService } from '../../services/ownership.service.js';
+import { ChatExecutionManager } from '../chat-execution-manager.js';
+import type { ChatMessage } from '../chat-service.types.js';
 
 describe('ChatExecutionManager', () => {
 	const executionRepository = mockInstance(ExecutionRepository);

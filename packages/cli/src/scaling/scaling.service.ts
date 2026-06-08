@@ -9,13 +9,13 @@ import { BINARY_ENCODING, sleep, jsonStringify, ensureError, UnexpectedError } f
 import type { IExecuteResponsePromiseData, IRun } from 'n8n-workflow';
 import assert, { strict } from 'node:assert';
 
-import { ActiveExecutions } from '@/active-executions';
-import { HIGHEST_SHUTDOWN_PRIORITY } from '@/constants';
-import { EventService } from '@/events/event.service';
-import { assertNever } from '@/utils';
+import { ActiveExecutions } from '@/active-executions.js';
+import { HIGHEST_SHUTDOWN_PRIORITY } from '@/constants.js';
+import { EventService } from '@/events/event.service.js';
+import { assertNever } from '@/utils.js';
 
-import { JOB_TYPE_NAME, QUEUE_NAME } from './constants';
-import { JobProcessor } from './job-processor';
+import { JOB_TYPE_NAME, QUEUE_NAME } from './constants.js';
+import { JobProcessor } from './job-processor.js';
 import type {
 	JobQueue,
 	Job,
@@ -27,7 +27,7 @@ import type {
 	QueueRecoveryContext,
 	JobMessage,
 	JobFailedMessage,
-} from './scaling.types';
+} from './scaling.types.js';
 
 @Service()
 export class ScalingService {
@@ -52,7 +52,7 @@ export class ScalingService {
 
 	async setupQueue() {
 		const { default: BullQueue } = await import('bull');
-		const { RedisClientService } = await import('@/services/redis-client.service');
+		const { RedisClientService } = await import('@/services/redis-client.service.js');
 
 		if (this.queue) return;
 
@@ -76,7 +76,7 @@ export class ScalingService {
 		const { McpServer, QueuedExecutionStrategy, RedisSessionStore } = await import(
 			'@n8n/n8n-nodes-langchain/mcp/core'
 		);
-		const { Publisher } = await import('@/scaling/pubsub/publisher.service');
+		const { Publisher } = await import('@/scaling/pubsub/publisher.service.js');
 
 		const publisher = Container.get(Publisher);
 
@@ -468,7 +468,7 @@ export class ScalingService {
 					storedAt: executionData.storedAt,
 				};
 
-				const { McpService } = await import('@/modules/mcp/mcp.service');
+				const { McpService } = await import('@/modules/mcp/mcp.service.js');
 				const mcpService = Container.get(McpService);
 				mcpService.handleWorkerResponse(executionId, runData);
 			} else {

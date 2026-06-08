@@ -6,14 +6,14 @@ import { WAITING_TOKEN_QUERY_PARAM } from 'n8n-core';
 import type { IWorkflowBase, Workflow } from 'n8n-workflow';
 import { SEND_AND_WAIT_OPERATION } from 'n8n-workflow';
 
-import { ConflictError } from '@/errors/response-errors/conflict.error';
-import { NotFoundError } from '@/errors/response-errors/not-found.error';
-import type { EventService } from '@/events/event.service';
-import * as WebhookHelpers from '@/webhooks/webhook-helpers';
-import { WaitingWebhooks } from '@/webhooks/waiting-webhooks';
-import type { WebhookService } from '@/webhooks/webhook.service';
-import type { WaitingWebhookRequest } from '@/webhooks/webhook.types';
-import * as WorkflowExecuteAdditionalData from '@/workflow-execute-additional-data';
+import { ConflictError } from '@/errors/response-errors/conflict.error.js';
+import { NotFoundError } from '@/errors/response-errors/not-found.error.js';
+import type { EventService } from '@/events/event.service.js';
+import * as WebhookHelpers from '@/webhooks/webhook-helpers.js';
+import { WaitingWebhooks } from '@/webhooks/waiting-webhooks.js';
+import type { WebhookService } from '@/webhooks/webhook.service.js';
+import type { WaitingWebhookRequest } from '@/webhooks/webhook.types.js';
+import * as WorkflowExecuteAdditionalData from '@/workflow-execute-additional-data.js';
 
 class TestWaitingWebhooks extends WaitingWebhooks {
 	exposeCreateWorkflow(workflowData: IWorkflowBase): Workflow {

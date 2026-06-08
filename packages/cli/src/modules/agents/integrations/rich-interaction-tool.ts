@@ -2,7 +2,7 @@ import { Tool } from '@n8n/agents/tool';
 import { Container } from '@n8n/di';
 import { z } from 'zod';
 
-import { ChatIntegrationRegistry } from './agent-chat-integration';
+import { ChatIntegrationRegistry } from './agent-chat-integration.js';
 
 // Conservative default — works on every platform that supports buttons.
 // Used when the tool is constructed without a platform hint.

@@ -1,4 +1,4 @@
-import { createRichInteractionTool } from '../rich-interaction-tool';
+import { createRichInteractionTool } from '../rich-interaction-tool.js';
 
 describe('createRichInteractionTool', () => {
 	it('should build a tool with the correct name', () => {

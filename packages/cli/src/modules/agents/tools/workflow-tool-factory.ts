@@ -32,11 +32,11 @@ import {
 } from 'n8n-workflow';
 import { z } from 'zod';
 
-import type { ActiveExecutions } from '@/active-executions';
-import type { WorkflowRunner } from '@/workflow-runner';
-import type { WorkflowFinderService } from '@/workflows/workflow-finder.service';
+import type { ActiveExecutions } from '@/active-executions.js';
+import type { WorkflowRunner } from '@/workflow-runner.js';
+import type { WorkflowFinderService } from '@/workflows/workflow-finder.service.js';
 
-import { sanitizeToolName } from '../json-config/agent-config-composition';
+import { sanitizeToolName } from '../json-config/agent-config-composition.js';
 
 // ---------------------------------------------------------------------------
 // Constants

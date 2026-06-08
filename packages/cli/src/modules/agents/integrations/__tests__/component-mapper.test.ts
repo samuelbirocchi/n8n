@@ -52,7 +52,7 @@ jest.mock('../esm-loader', () => {
 	};
 });
 
-import { ComponentMapper } from '../component-mapper';
+import { ComponentMapper } from '../component-mapper.js';
 
 describe('ComponentMapper', () => {
 	let mapper: ComponentMapper;

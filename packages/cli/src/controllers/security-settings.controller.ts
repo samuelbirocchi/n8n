@@ -8,11 +8,11 @@ import {
 } from '@n8n/permissions';
 import type { Response } from 'express';
 
-import { ForbiddenError } from '@/errors/response-errors/forbidden.error';
-import { EventService } from '@/events/event.service';
-import { InstanceRedactionEnforcementService } from '@/modules/redaction/instance-redaction-enforcement.service';
-import { isRedactionEnforcementEnabled } from '@/modules/redaction/redaction-enforcement.feature-flag';
-import { SecuritySettingsService } from '@/services/security-settings.service';
+import { ForbiddenError } from '@/errors/response-errors/forbidden.error.js';
+import { EventService } from '@/events/event.service.js';
+import { InstanceRedactionEnforcementService } from '@/modules/redaction/instance-redaction-enforcement.service.js';
+import { isRedactionEnforcementEnabled } from '@/modules/redaction/redaction-enforcement.feature-flag.js';
+import { SecuritySettingsService } from '@/services/security-settings.service.js';
 
 @RestController('/settings/security')
 export class SecuritySettingsController {

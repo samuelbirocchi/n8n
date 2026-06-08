@@ -4,18 +4,18 @@
  * Prompts for the multi-agent workflow builder system.
  */
 
-export { buildSupervisorPrompt } from './supervisor.prompt';
+export { buildSupervisorPrompt } from './supervisor.prompt.js';
 export {
 	buildDiscoveryPrompt,
 	exampleCategorizations,
 	formatTechniqueList,
 	formatExampleCategorizations,
-} from './discovery.prompt';
-export type { DiscoveryPromptOptions } from './discovery.prompt';
+} from './discovery.prompt.js';
+export type { DiscoveryPromptOptions } from './discovery.prompt.js';
 export {
 	buildResponderPrompt,
 	buildRecursionErrorWithWorkflowGuidance,
 	buildRecursionErrorNoWorkflowGuidance,
 	buildGeneralErrorGuidance,
 	buildDataTableCreationGuidance,
-} from './responder.prompt';
+} from './responder.prompt.js';

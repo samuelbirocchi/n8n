@@ -18,10 +18,10 @@ import {
 } from 'n8n-workflow';
 import { v4 as uuid } from 'uuid';
 
-import { BadRequestError } from '@/errors/response-errors/bad-request.error';
-import { VariablesService } from '@/environments.ee/variables/variables.service.ee';
+import { BadRequestError } from '@/errors/response-errors/bad-request.error.js';
+import { VariablesService } from '@/environments.ee/variables/variables.service.ee.js';
 
-import { OwnershipService } from './services/ownership.service';
+import { OwnershipService } from './services/ownership.service.js';
 
 /**
  * Validates that pinned data does not exceed size limits.

@@ -1,8 +1,8 @@
 import type InfisicalClient from 'infisical-node';
 import { UnexpectedError, type IDataObject, type INodeProperties } from 'n8n-workflow';
 
-import { SecretsProvider } from '../types';
-import type { SecretsProviderSettings } from '../types';
+import { SecretsProvider } from '../types.js';
+import type { SecretsProviderSettings } from '../types.js';
 
 export interface InfisicalSettings {
 	token: string;

@@ -15,7 +15,7 @@ import {
 	type NodeLoader,
 } from 'n8n-workflow';
 
-import type { LoadNodesAndCredentials } from '@/load-nodes-and-credentials';
+import type { LoadNodesAndCredentials } from '@/load-nodes-and-credentials.js';
 
 import {
 	LANGCHAIN_PACKAGE_NAME,
@@ -23,8 +23,8 @@ import {
 	MCP_REGISTRY_PACKAGE_NAME,
 	serverToCredentialDescription,
 	serverToNodeDescription,
-} from './node-description-transform';
-import type { McpRegistryServer } from './registry/mcp-registry.types';
+} from './node-description-transform.js';
+import type { McpRegistryServer } from './registry/mcp-registry.types.js';
 
 /**
  * Synthetic node loader: turns each registry server into a node type, all
